@@ -1,44 +1,17 @@
-const cors = require('cors');
-const express = require('express');
-const db = require('./db');
-const bodyParser = require('body-parser');
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-const app = express();
-const PORT = 4000;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
-// Configuración de CORS (permite conexiones desde otros dominios)
-app.use(cors());
-app.use(bodyParser.json());
-
-// Rutas del backend
-app.post('/ia', (req, res) => {
-    const { name, description, label, link } = req.body;
-    
-    console.log('Datos recibidos:', req.body);  // Log de los datos enviados
-
-    const query = `INSERT INTO iaList (name, description, label, link) VALUES (?, ?, ?, ?)`;
-    db.run(query, [name, description, label, link], function (err) {
-        if (err) {
-            console.error('Error al insertar en la base de datos:', err.message);
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({ id: this.lastID });
-    });
-});
-
-
-
-app.get('/ia', (req, res) => {
-    db.all('SELECT * FROM iaList', [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(rows);
-    });
-});
-
-// Iniciar servidor
-app.listen(5000, () => {
-    console.log(`Servidor corriendo en http://localhost:5000`);
-});
-
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
